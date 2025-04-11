@@ -17,6 +17,8 @@ Q1 and Q2 can be solved with the command `python3 vol.py <memory file> windows.i
 Q3 and Q4 can be solved with `python3 vol.py <memory file> windows.pslist or windows.pstree`, for Q4 the process is trying to pretend csrss.exe 
 
 ![tcm01.jpg](images/tcm01.jpg)
+
+The real process should be csrss instead of crss
 ![tcm03.jpg](images/tcm03.jpg)
 
 5. How many established network connections did the process have active at the time of capture?
