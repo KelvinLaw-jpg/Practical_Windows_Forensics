@@ -9,11 +9,15 @@ Your task is to test out your memory analysis skills by examining the challenge.
 2. What was the major/minor version of the system set to?
 
 Q1 and Q2 can be solved with the command `python3 vol.py <memory file> windows.info`
+![tcm02.jpg](images/tcm02.jpg)
 
 3. What is the name of the process(es) that appears malicious or out of place?
 4. Which legitimate Windows process is it attempting to obfuscate as?
 
 Q3 and Q4 can be solved with `python3 vol.py <memory file> windows.pslist or windows.pstree`, for Q4 the process is trying to pretend csrss.exe 
+
+![tcm01.jpg](images/tcm01.jpg)
+![tcm03.jpg](images/tcm03.jpg)
 
 5. How many established network connections did the process have active at the time of capture?
 
