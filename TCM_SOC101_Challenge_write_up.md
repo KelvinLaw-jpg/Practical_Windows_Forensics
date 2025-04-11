@@ -35,3 +35,7 @@ Use `python3 vol.py <memory file> windows.pstree --pid <ID>` for Q6 and Q7
 Dump the file by using `python3 vol.py <memory file> -o <output location> windows.pslist --pid <id> --dump` and hash them
 
 9. What is the name of the persistent run entry set by the malware?
+
+This command `python3 vol.py <memory file> -o <output location> windows.registry.findkey "<key and sub key location>"` will show all the keys and their values, check the run key
+
+![tcm04.jpg](images/tcm04.jpg)
