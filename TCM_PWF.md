@@ -33,17 +33,23 @@ Step2 (optional): Use KAPE to extract most important artifacts
 With the registry, here are a list of informations that an analyst would like to find out:
 
 **System Info**
-Computername: 
+1. Computername: 
+
 Registry: HKLM\System\CurrentControlSet\Control\Computername\
-Windows Version: 
+
+2. Windows Version: 
 Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
-Timezone:
+
+3. Timezone:
 Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
-Network Information: 
+
+5. Network Information: 
 Registry: HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{interface-name}
-Shutdown time: 
+
+6. Shutdown time: 
 Registry: HKLM\System\ControlSet001\Control\Windows\ShutdownTime
-Defender settings:
+
+7. Defender settings:
 Registry: HKLM\Software\Microsoft\Windows Defender\
 
 **Users, Groups and User Profiles**
@@ -93,19 +99,19 @@ Tools required:
 
 ---
 **Key Event IDs to look at**
-5000 Defender enabled
-5001 Defender disabled
-7045 A new service was installed
-4624 An account was successfully logged on
-400 A new PowerShell was initiated @ windows powershell log
-4104 & 4103 Execute a remote command & executing pipeline @ Windows PowerShell Operational log
+- 5000 Defender enabled
+- 5001 Defender disabled
+- 7045 A new service was installed
+- 4624 An account was successfully logged on
+- 400 A new PowerShell was initiated @ windows powershell log
+- 4104 & 4103 Execute a remote command & executing pipeline @ Windows PowerShell Operational log
 
 **Sysmon logs**
-1 Process creation
-3 Network connection
-11 File create
-12, 13 Registry Events
-22 DNS query
+- 1 Process creation
+- 3 Network connection
+- 11 File create
+- 12, 13 Registry Events
+- 22 DNS query
 
 ---
 
