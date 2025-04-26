@@ -60,6 +60,10 @@ Open / Save MRU:	Files that were opened
 Last-Visited MRU: 	Applications used to open files
 
 ### NTFS Disk Overview
+
+Logical Overview of a hard drive partition
+![02](images/PWF_hdpartition.jpg)
+
 Important files: $MFT,$J
 
 With the registry, here are a list of informations that an analyst would like to find out:
