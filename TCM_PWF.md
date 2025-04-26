@@ -31,6 +31,7 @@ Step2 (optional): Use KAPE to extract most important artifacts
 ### Registry Analysis
 
 ### NTFS Disk Overview
+Important files: $MFT,$J
 
 ### Event log Analysis
 
