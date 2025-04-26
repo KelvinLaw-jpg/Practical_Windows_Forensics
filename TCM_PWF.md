@@ -62,6 +62,17 @@ Last-Visited MRU: 	Applications used to open files
 ### NTFS Disk Overview
 Important files: $MFT,$J
 
+With the registry, here are a list of informations that an analyst would like to find out:
+
+1. Which files are located in My Computer\CLSID_Desktop\PWF-main\PWF-main\AtomicRedTeam?
+2. What is the MFT Entry Number for the file "ART-attack.ps1"?
+3. What are the MACB timestamps for "ART-attack.ps1"?
+4. Was "ART-attack.ps1" timestomped?
+5. When was the file "deleteme_T1551.004" created and deleted?
+6. What was the Entry number for "deleteme_T1551.004" and does it still exist in the MFT?
+
+
+
 ### Event log Analysis
 
 Tools required: 
