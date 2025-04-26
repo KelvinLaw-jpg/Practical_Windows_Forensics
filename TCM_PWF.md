@@ -30,6 +30,35 @@ Step2 (optional): Use KAPE to extract most important artifacts
 
 ### Registry Analysis
 
+With the registry, here are a list of informations that an analyst would like to find out:
+
+**System Info**
+Computername: 
+Registry: HKLM\System\CurrentControlSet\Control\Computername\
+Windows Version: 
+Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
+Timezone:
+Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
+Network Information: 
+Registry: HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{interface-name}
+Shutdown time: 
+Registry: HKLM\System\ControlSet001\Control\Windows\ShutdownTime
+Defender settings:
+Registry: HKLM\Software\Microsoft\Windows Defender\
+
+**Users, Groups and User Profiles**
+Active accounts during the attack timeframe?
+Which account(s) were created?
+Which accounts are Administrator group members?
+Which users have profiles?
+
+**User Behavior**
+UserAssist: 		Applications opened
+RecentDocs: 		Files and folders opened
+Shellbags:		Locations browsed by the user
+Open / Save MRU:	Files that were opened
+Last-Visited MRU: 	Applications used to open files
+
 ### NTFS Disk Overview
 Important files: $MFT,$J
 
