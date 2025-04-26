@@ -34,7 +34,6 @@ With the registry, here are a list of informations that an analyst would like to
 
 **System Info**
 1. Computername: 
-
 Registry: HKLM\System\CurrentControlSet\Control\Computername\
 
 2. Windows Version: 
