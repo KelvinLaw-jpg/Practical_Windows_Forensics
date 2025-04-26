@@ -81,6 +81,44 @@ With the registry, here are a list of informations that an analyst would like to
 6. What was the Entry number for "deleteme_T1551.004" and does it still exist in the MFT?
 
 
+### Execution Artifacts
+
+**Background Activity Moderator (BAM)**
+Registry: HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings
+- Which executables (.exe files) did the BAM record for the IEUser (RID 1000) incl. their last execution date and time? 
+
+**Application Compatibility Cache ("AppCompatCache") / Shimcache**
+
+Registry: SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache
+
+Determine the cache entry position for: 
+-	AtomicService.exe: 
+-	mavinject.exe: 
+
+**AmCache**
+
+Registry: C:\Windows\AppCompat\Programs\Amcache.hve
+- What SHA-1 hash did Amcache record for AtomicService.exe?
+
+**Prefetch**
+
+Path: C:\Windows\Prefetch\*.pf
+Use the Prefetch-Timeline output to produce a timeline of suspicious execution events in the Eric Zimmerman Timeline Explorer:
+
+- POWERSHELL.exe
+- cmd.exe
+- NET.exe
+- REG.exe
+- SCHTASKS.exe
+- SC.exe
+- ATOMICSERVICE.EXE
+- MAVINJECT.exe
+- NOTEPAD.exe
+
+**Shortcut (LNK) Files**
+Path: C:\users\<username>\AppData\Roaming\Microsoft\Windows\Recent
+Path: C:\users\<username>\AppData\Roaming\Microsoft\Office\Recent
+
 
 ### Event log Analysis
 
