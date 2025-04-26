@@ -9,6 +9,19 @@ Tools used:
 - KAPE
 
 
+### Forensic Process Overall & Collection
+Full NIST 800-86 guide [here](https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-86.pdf)
+
+Collection -> Examination -> Analysis -> Reporting -> back to collection (Media -> Data -> Information -> Evidence)
+
+**Order of collection should always follow the order of volitility**
+**Step 1**: In real life we will either take a live Data from the machine or put the machine into hibernation so we can collect the data from the memory. In the VM now, we will suspend the VM first.
+Since I am using VMware, I will preserve the .vmem and the .vmsn and hash it. Next we will collect the disk by using qemu-img by running `qemu-img.exe convert -O vpc <full path that contains vmdk> output_image.vhd`. Hashes will be generated after all this. In real life, all this should be done with FTK Imager instead. 
+
+![01](images/pwf_hash.jpg)
+
+
+
 ### NTFS Disk Analysis 
 
 ### Event log Analysis
