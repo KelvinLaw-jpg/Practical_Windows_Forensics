@@ -31,7 +31,15 @@ Tools required:
 5001 Defender disabled
 7045 A new service was installed
 4624 An account was successfully logged on
-400 A new PowerShell was initiated
+400 A new PowerShell was initiated @ windows powershell log
+4104 & 4103 Execute a remote command & executing pipeline @ Windows PowerShell Operational log
+
+**Sysmon logs**
+1 Process creation
+3 Network connection
+11 File create
+12, 13 Registry Events
+22 DNS query
 
 ---
 
