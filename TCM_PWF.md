@@ -28,8 +28,9 @@ In the VM now, we will suspend the VM first. Since I am using VMware, I will pre
 Step1: Open a new case with Autopsy
 Step2 (optional): Use KAPE to extract most important artifacts
 
+### Registry Analysis
 
-### NTFS Disk Analysis 
+### NTFS Disk Overview
 
 ### Event log Analysis
 
