@@ -43,10 +43,7 @@ Next, lets search for any related events related to free_magicules.doc.
 ![free_magicules.doc](images/Tempest_03.png)
 
 and we found that the document was opened at 17:13:12 with a PID: 496. Now lets have a look at the same stuff in sysmon view.
-
-![initialc2 connection](images/Tempest_04.png)
-
-looking at the image, we see that the file was executed successfully and registry event has changed. Next, we want to check what did the doc do on/after execution, therefore we will search for all events with a PPID: 496 (process spawn by the doc).
+We want to check what did the doc do on/after execution, therefore we will search for all events with a PPID: 496 (process spawn by the doc).
 
 ![interesting command](images/Tempest_05.png)
 
