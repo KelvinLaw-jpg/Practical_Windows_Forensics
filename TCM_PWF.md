@@ -20,7 +20,7 @@ Collection -> Examination -> Analysis -> Reporting -> back to collection (Media 
 **Step 1**: In real life we will either take a live Data from the machine or put the machine into hibernation so we can collect the data from the memory through hiber.sys file on windows.
 In the VM now, we will suspend the VM first. Since I am using VMware, I will preserve the .vmem and the .vmsn and hash it. Next we will collect the disk by using qemu-img by running `qemu-img.exe convert -O vpc <full path that contains vmdk> output_image.vhd`. Hashes will be generated after all this. In real life, all this should be done with FTK Imager instead. 
 
-![01](images/pwf_hash.jpg)
+![01](images/pwf_01.png)
 
 ### First Examination of the Disk
 **Rule number 1: Make a copy of the image and mount the drive as read only**
@@ -67,7 +67,7 @@ Last-Visited MRU: 	Applications used to open files
 ### NTFS Disk Overview
 
 Logical Overview of a hard drive partition
-![02](images/PWF_hdpartition.jpg)
+![02](images/PWF_02.png)
 
 Important files: $MFT,$J
 
