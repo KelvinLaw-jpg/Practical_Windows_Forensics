@@ -153,8 +153,6 @@ Tools required:
 ---
 
 
-
-
 ### Memory Analysis with Volitility
 
 
@@ -163,6 +161,15 @@ Tools required:
 1. Creating the timeline
 
 
-## Acknowledgements
- All materials used here go to:
- - [https://bluecapesecurity.com/getting-started/](https://bluecapesecurity.com/getting-started/)
+## Additional Resources
+- https://cloud.google.com/blog/topics/threat-intelligence/digging-up-the-past-windows-registry-forensics-revisited/
+- https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
+
+
+
+## Tools to use and showcase
+- Autopsy
+- FTK imager
+- dd
+- KAPE
+- EZ Tools
