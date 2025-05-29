@@ -23,39 +23,82 @@ In the VM now, we will suspend the VM first. Since I am using VMware, I will pre
 ![01](images/pwf_01.png)
 
 ### First Examination of the Disk
-**Rule number 1: Make a copy of the image and mount the drive as read only**
 
-Step1: Open a new case with Autopsy
-Step2 (optional): Use KAPE to extract most important artifacts
+Disk Analysis Process: 
+- System & Usesr Info
+   - Registry
+- File Analysis
+   - NTFS
+- Evidence of Execution
+   - Background Activity Moderator
+   - ShimCache
+   - Amcache
+   - Prefetch
+- Persistence Mechanisms
+   - Run Keys
+   - Startup Folder
+   - Scheduled Tasks
+   - Services
+- Event Log Analysis
+
 
 ### Registry Analysis
 
 With the registry, here are a list of informations that an analyst would like to find out:
 
-**System Info**
-1. Computername: 
-Registry: HKLM\System\CurrentControlSet\Control\Computername\
+- HKLM and HKU are really the real ref to the actual hives, others are a combination of references to what is inside these 2 hives
+- ~94% of the keys are made of REG_BINARY (arbitrary-lenth bin data) & REG_DWORD (32-bit number) data type
+- SOFTWARE hive stores all related keys of the software that installed on the OS
+- There are multiple controlSets and to figure out which is our current control set, we go to the Select key and check LastKnownGood
+- HKEY_CLASSES_ROOT holds all the user preferences and system specify settings
+- LastKnownGood is not updated immediately after boot.It only updates after you log in successfully (i.e., once services have started and the system deems the boot successful).Before login, current control set can be at 001 but lasknowngood is still at 002, and when i log in. Thats when it updates to 001.
 
-2. Windows Version: 
-Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
+- To time save, we can bulk parse from regRipper, check if some dats are hidden, use `attrib *` in cmd to see them, use `attrib -h NTUSER.DAT` to unhide.
+- Then `for /r %i in (*) do ($PATH\rip.exe -r %i -a > %i.txt)` 
 
-3. Timezone:
-Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
 
-5. Network Information: 
-Registry: HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{interface-name}
+# 🗂️ Windows Registry Hive Mapping
 
-6. Shutdown time: 
-Registry: HKLM\System\ControlSet001\Control\Windows\ShutdownTime
+This table maps the logical registry hives seen in Windows Registry Editor to their corresponding physical files on disk. It's especially useful in forensics, incident response, or deep system analysis.
 
-7. Defender settings:
-Registry: HKLM\Software\Microsoft\Windows Defender\
+## 📘 Main Logical Registry Hives with Physical File Locations
 
-**Users, Groups and User Profiles**
-Active accounts during the attack timeframe?
-Which account(s) were created?
-Which accounts are Administrator group members?
-Which users have profiles?
+| Hive Root                     | Physical Hive File Location(s)                                                                 | Description                                                  |
+|------------------------------|------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `HKEY_LOCAL_MACHINE` (HKLM)  | `C:\Windows\System32\config\SAM` <br> `C:\Windows\System32\config\SYSTEM` <br> `C:\Windows\System32\config\SOFTWARE` <br> `C:\Windows\System32\config\SECURITY` <br> `C:\Windows\System32\config\DEFAULT` | System-wide settings loaded from system hive files          |
+| `HKEY_CURRENT_USER` (HKCU)   | `C:\Users\<Username>\NTUSER.DAT` <br> `C:\Users\<Username>\AppData\Local\Microsoft\Windows\UsrClass.dat`| Settings for the currently logged-in user                   |
+| `HKEY_CLASSES_ROOT` (HKCR)   | Merged view of: <br> - `HKLM\Software\Classes` from `SOFTWARE` hive (`C:\Windows\System32\config\SOFTWARE`) <br> - `HKCU\Software\Classes` from `NTUSER.DAT` & `UsrClass.dat` (`C:\Users\<Username>\NTUSER.DAT`) | File associations, COM registrations, merged from HKCU and HKLM |
+| `HKEY_USERS` (HKU)           | `C:\Windows\System32\config\DEFAULT` <br> `C:\Users\<Username>\NTUSER.DAT` (per user profile)  <br> `C:\Users\<Username>\AppData\Local\Microsoft\Windows\UsrClass.dat` (for all user profiles)    | Settings for all user accounts                              |
+| `HKEY_CURRENT_CONFIG` (HKCC) | Built dynamically from `HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current` (in `SYSTEM` hive) | Hardware profile currently in use, built at boot time       |
+
+## 🔁 Logical to Physical Hive Mapping
+
+
+| Logical Hive Path                          | Physical Hive File Location                                                  | Notes                                                    |
+|--------------------------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------|
+| `HKLM\SAM`                                 | `C:\Windows\System32\config\SAM`                                             | SAM database (local user accounts)                      |
+| `HKLM\SYSTEM`                              | `C:\Windows\System32\config\SYSTEM`                                          | Core system configuration                                |
+| `HKLM\SOFTWARE`                            | `C:\Windows\System32\config\SOFTWARE`                                        | System-wide installed apps and settings                 |
+| `HKLM\SECURITY`                            | `C:\Windows\System32\config\SECURITY`                                        | Local security policy, secrets                          |
+| `HKLM\HARDWARE`                            | *Volatile - built at boot, not stored on disk*                               | Live hardware info only                                  |
+| `HKLM\DEFAULT`                             | `C:\Windows\System32\config\DEFAULT`                                         | Default user profile (used for new user creation)        |
+| `HKU\S-1-5-XX-...-1001`                    | `C:\Users\Username\NTUSER.DAT`                                               | Logged-in user's profile                                |
+| `HKU\S-1-5-XX-...-1001\Software\Classes`   | `C:\Users\Username\AppData\Local\Microsoft\Windows\UsrClass.dat`            | Per-user class registrations                            |
+| `HKCU`                                     | Alias to the SID key in `HKU`, so `NTUSER.DAT` usually `S-1-5-21-...-1001`  | The current user                                        |
+| `HKCR`                                     | Merged view of `HKCU\Software\Classes` under `C:\Windows\System32\config\SOFTWARE` and `HKLM\Software\Classes` under `C:\Users\<username>\NTUSER.DAT` | File associations and COM class registrations           |
+| `HKCC`                                     | Built from `HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current`        | Hardware profile in use                                 |
+
+## 🧠 Notes
+
+- `NTUSER.DAT` and `UsrClass.dat` contain per-user settings and are located in the user’s profile directory.
+- `HKCC` and `HKCR` do **not** have their own hive files; they are built dynamically.
+- `HKEY_USERS` is useful when multiple users are logged in or loaded manually during forensic analysis.
+- `HKEY_CURRENT_USER` is just a pointer to the current SID under `HKEY_USERS`.
+
+---
+
+Created for forensic and malware analysis reference.
+
 
 **User Behavior**
 UserAssist: 		Applications opened
