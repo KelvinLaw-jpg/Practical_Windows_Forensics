@@ -216,3 +216,10 @@ Tools required:
 - dd
 - KAPE
 - EZ Tools
+
+Workflow: Got raw disk and mem -> make copy with FTK in E01 -> check hash -> dump registry with ftk, dump reg with KAPE, or load the whole thing and do it in autopsy -> parse it with EZ tools, parse it with regripper -> analysis with Reg explorer, analysis with notepad++ if it's regripper
+
+## Analysis
+
+### System Info
+
