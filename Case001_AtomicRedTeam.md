@@ -65,8 +65,50 @@ UBR                       2006
 Timezone:
 Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
 
+TimeZoneInformation key
+ControlSet001\Control\TimeZoneInformation
+LastWrite Time 2025-05-29 04:17:17Z
+  DaylightName   -> @tzres.dll,-211
+  StandardName   -> @tzres.dll,-212
+  Bias           -> 480 (8 hours)
+  ActiveTimeBias -> 420 (7 hours)
+  TimeZoneKeyName-> Pacific Standard Time
+
 Network Information: 
 Registry: HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{interface-name}
+
+```
+Adapter: {3b4cb90d-57a4-4414-8c13-e6ca6904c4d8}
+LastWrite Time: 2025-05-28 19:27:50Z
+  EnableDHCP                   1
+  Domain
+  NameServer
+  DhcpIPAddress                192.168.65.150
+  DhcpSubnetMask               255.255.255.0
+  DhcpServer                   192.168.65.254
+  Lease                        1800
+  LeaseObtainedTime            2025-05-28 19:27:50Z
+  T1                           2025-05-28 19:42:50Z
+  T2                           2025-05-28 19:54:05Z
+  LeaseTerminatesTime          2025-05-28 19:57:50Z
+  AddressType                  0
+  IsServerNapAware             0
+  DhcpConnForceBroadcastFlag   0
+  DhcpDomain                   localdomain
+  DhcpNameServer               192.168.65.2
+  DhcpDefaultGateway           192.168.65.2
+  DhcpSubnetMaskOpt            255.255.255.0
+```
+
+```
+Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles
+Network
+  Key LastWrite    : 2025-05-28 19:33:52Z
+  DateLastConnected: 2025-05-28 12:33:52
+  DateCreated      : 2025-05-28 20:19:54
+  DefaultGatewayMac: 00-50-56-FB-B6-EB
+  Type             : wired
+```
 
 Shutdown time: 
 Registry: HKLM\System\ControlSet001\Control\Windows\ShutdownTime
