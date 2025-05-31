@@ -153,6 +153,15 @@ LastWrite Time: 2025-05-28 19:41:33Z
 DisableRealtimeMonitoring value = 1
 ```
 
+## Users, Groups, User Profiles
+
+Active accounts during the attack timeframe?
+
+Which account(s) were created?
+
+Which accounts are Administrator group members?
+
+Which users have profiles?
 
 
 
