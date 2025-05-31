@@ -112,10 +112,46 @@ Network
 
 Shutdown time: 
 Registry: HKLM\System\ControlSet001\Control\Windows\ShutdownTime
+```
+ControlSet001\Control\Windows key, ShutdownTime value
+LastWrite time: 2025-05-28 19:42:04Z
+ShutdownTime  : 2025-05-28 19:42:04Z
+```
 
 Defender settings:
 Registry: HKLM\Software\Microsoft\Windows Defender\
 
+```
+defender v.20200427
+(Software) Get Windows Defender settings
+Key path: Microsoft\Windows Defender
+LastWrite Time 2025-05-28 19:27:26Z
+Key path: Microsoft\Windows Defender\Exclusions\Paths
+Key path: Microsoft\Windows Defender\Exclusions\Extensions
+Key path: Microsoft\Windows Defender\Exclusions\Processes
+Key path: Microsoft\Windows Defender\Exclusions\TemporaryPaths
+Key path: Microsoft\Windows Defender\Exclusions\IpAddresses
+Key path: Microsoft\Windows Defender\Features
+TamperProtection value = 1
+If TamperProtection value = 1, it's disabled
+Key path: Microsoft\Windows Defender\Spynet
+LastWrite Time: 2025-05-28 19:41:34Z
+Spynet\SpynetReporting value = 2
+Spynet\SubmitSamplesConsent value = 1
+Key path: Microsoft\Windows Defender\Real-Time Protection
+LastWrite Time: 2025-05-29 03:17:40Z
+Key path: Policies\Microsoft\Windows Defender
+LastWrite Time 2025-05-28 19:41:33Z
+Key path: Policies\Microsoft\Windows Defender\Exclusions\Paths
+Key path: Policies\Microsoft\Windows Defender\Exclusions\Extensions
+Key path: Policies\Microsoft\Windows Defender\Exclusions\Processes
+Key path: Policies\Microsoft\Windows Defender\Exclusions\TemporaryPaths
+Key path: Policies\Microsoft\Windows Defender\Exclusions\IpAddresses
+DisableAntiSpyware value = 1
+Key path: Policies\Microsoft\Windows Defender\Real-Time Protection
+LastWrite Time: 2025-05-28 19:41:33Z
+DisableRealtimeMonitoring value = 1
+```
 
 
 
