@@ -4,7 +4,7 @@ Project Brief: This project is to set up a win 10 virtual machine as a target, a
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
 
 Below are the attacks that this script has executed:
-![ART](images/PWF_Analysis-MITRE)
+![ART](images/PWF_Analysis-MITRE.png)
 
 Tools used:
 - EZTools
@@ -44,8 +44,23 @@ Disk Analysis Process:
 
 Computername: 
 Registry: HKLM\System\CurrentControlSet\Control\Computername\
+
+DESKTOP-BBERDPP
+
 Windows Version: 
 Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
+
+ProductName               Windows 10 Enterprise Evaluation
+ReleaseID                 2009
+BuildLab                  19041.vb_release.191206-1406
+BuildLabEx                19041.1.amd64fre.vb_release.191206-1406
+CompositionEditionID      EnterpriseEval
+RegisteredOrganization
+RegisteredOwner           PWF_Victim
+UBR                       2006
+InstallDate               2025-05-28 19:20:00Z
+InstallTime               2025-05-28 19:20:00Z
+UBR                       2006
 
 Timezone:
 Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
