@@ -219,8 +219,75 @@ LastWrite : 2025-05-28 19:42:01Z
 UserAssist:
 NTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist
 
+```
+{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA} – a list of app, files, links, and other objects that have been accessed.
+2025-05-28 19:44:35Z
+  Microsoft.Windows.Explorer (11)
+2025-05-28 19:42:38Z
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\notepad.exe (2)
+2025-05-28 19:42:35Z
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\cmd.exe (2)
+2025-05-28 19:38:54Z
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\mmc.exe (1)
+2025-05-28 19:33:07Z
+  MSEdge (1)
+2025-05-28 19:26:24Z
+  D:\setup64.exe (1)
+2025-05-28 19:25:46Z
+  D:\setup.exe (1)
+2025-05-28 19:21:34Z
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\SnippingTool.exe (9)
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\mspaint.exe (7)
+
+Value names with no time stamps:
+  C:\$WINDOWS.~BT\Sources\SetupHost.exe
+  {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe
+
+{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F} – Lists the shortcut links used to start programs. The crono order if earlist at bottom and latest to the top.
+2025-05-28 19:44:35Z
+  {9E3995AB-1F9C-4F13-B827-48B24B6C7174}\TaskBar\File Explorer.lnk (6)
+2025-05-28 19:42:35Z
+  {A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\System Tools\Command Prompt.lnk (2)
+2025-05-28 19:21:34Z
+  {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Snipping Tool.lnk (9)
+  {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Paint.lnk (7)
+```
+
+From the above, we see that within the time frame of 2025-05-28 19:20, the following programs have been accessed: powershell, cmd, paint, mmc, notepad, snipping tool.
+
 RecentDocs (store something interacted recently with user):
 NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Exploere\RecenDocs\
+
+```
+recentdocs v.20200427
+(NTUSER.DAT) Gets contents of user's RecentDocs key
+
+RecentDocs
+**All values printed in MRUList\MRUListEx order.
+Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs
+LastWrite Time: 2025-05-28 19:42:38Z
+  5 = New Text Document.txt
+  0 = The Internet
+  4 = threat/
+  3 = Network and Internet
+  2 = ::{8E908FC9-BECC-40F6-915B-F4CA0E70D03D}
+  1 = network
+
+Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\.com/search?q=network+discovery&form=WNSGPH&qs=OS&cvid=1065b9c5d2b6474f9945e48741f295fe&pq=nnetwork+discovery&cc=US&setlang=en-US&nclid=A30A34DCE1B5359F031D07AC889D52AA&ts=1748460786948&nc
+LastWrite Time 2025-05-28 19:33:07Z
+MRUListEx = 
+
+Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\.txt
+LastWrite Time 2025-05-28 19:42:38Z
+MRUListEx = 0
+  0 = New Text Document.txt
+
+Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\Folder
+LastWrite Time 2025-05-28 19:37:25Z
+MRUListEx = 0,1
+  0 = The Internet
+  1 = Network and Internet
+```
 
 ShellBags:
 To do with windows explorers and windows, they can be under: 
@@ -232,10 +299,28 @@ USRCLASS.DAT:
 Local Settings\Software\Microsoft\Windows\Shell\BagMRU
 Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags
 
+```
+shellbags v.20200428
+(USRCLASS.DAT) Shell/BagMRU traversal in Win7+ USRCLASS.DAT hives
+
+MRU Time             |Modified             | Accessed             | Created              | Zip_Subfolder        | MFT File Ref |Resource
+------------         |------------         | ------------         | ------------         | ------------         | ------------ |------------
+                     |                     |                      |                      |                      |              |My Games [Desktop\0\]
+                     |                     |                      |                      |                      |              |My Computer [Desktop\1\]
+2025-05-28 19:26:18  |                     |                      |                      |                      |              |My Computer\D:\ [Desktop\1\0\]
+                     |                     |                      |                      |                      |              |My Network Places [Desktop\2\]
+2025-05-28 19:34:18  |                     |                      |                      |                      |              |Control Panel [Desktop\3\]
+2025-05-28 19:34:08  |                     |                      |                      |                      |              |Control Panel\Network and Internet [Desktop\3\0\]
+                     |                     |                      |                      |                      |              |Control Panel\Network and Internet\CLSID_Network Connections [Desktop\3\0\0\]
+2025-05-28 19:34:07  |                     |                      |                      |                      |              |Control Panel\Network and Internet\CLSID_Network and Sharing Center [Desktop\3\0\1\]
+2025-05-28 19:34:18  |                     |                      |                      |                      |              |Control Panel\Network and Internet\CLSID_Network and Sharing Center\Advanced sharing settings [Desktop\3\0\1\0\]
+```
 ## NTFS - File System Analysis
 
-**Which files are located in My Computer\CLSID_Desktop\PWF-main\PWF-main\AtomicRedTeam?**
-`MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --cdvf <name of csv eg: MFT.csv>`
+We will parse the file with the following command `MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --csvf <name of csv eg: MFT.csv>`
+
+**Which files are related to AtomicRedTeam?**
+
 
 **What is the MFT Entry Number for the file "ART-attack.ps1"?**
 To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
