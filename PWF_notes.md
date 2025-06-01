@@ -147,6 +147,11 @@ In Data attribute’s resident value being false, it means whatever content that
 
 Extra Resources on MACb: https://andreafortuna.org/2017/10/06/macb-times-in-windows-forensic-analysis/
 
+**Evidence of deleted files**
+- USN Journaling are used in an event of system crashing, so important files can be restored.
+- Important files for journalling: root/$LogFile, root/$Extend/$UsnJrnl
+- The UsnJrnl consist of 2 ADS ($Max, and $J)
+- To parse $J we say `mftecmd.exe -f "$PATH\$J" -m "$PATH\$MFT" --csv "Output Path" 
 
 ### Execution Artifacts
 
