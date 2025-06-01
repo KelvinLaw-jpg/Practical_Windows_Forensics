@@ -93,7 +93,11 @@ Last-Visited MRU: 	Applications used to open files
 
 UserAssist:
 NTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist
-In RegRipper there is a UserAssist plugin, so in the txt doc, we search for UserAssist, then we will see the logs of each user ID, diff key logs diff stuff, {very long so wont type} – a list of app, files, links, and other objects that have been accessed. {another very long one} – Lists the shortcut links used to start programs. The crono order if earlist at bottom and latest to the top.
+In RegRipper there is a UserAssist plugin, so in the txt doc, we search for UserAssist, then we will see the logs of each user ID, diff key logs diff stuff:
+
+{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA} – a list of app, files, links, and other objects that have been accessed. 
+
+{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F} – Lists the shortcut links used to start programs. The crono order if earlist at bottom and latest to the top.
 
 RecentDocs (store something interacted recently with user):
 NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Exploere\RecenDocs\
