@@ -320,12 +320,47 @@ MRU Time             |Modified             | Accessed             | Created     
 We will parse the file with the following command `MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --csvf <name of csv eg: MFT.csv>`
 
 **Which files are related to AtomicRedTeam?**
-
+- Invoke-AtomicRedTeam.psd1
+- Invoke-AtomicRedTeam.psm1
+- AtomicClassSchema.ps1
+- Get-AtomicTechnique.ps1
+- ART-attack.ps1
 
 **What is the MFT Entry Number for the file "ART-attack.ps1"?**
+
+
+
 To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
+```
+**** STANDARD INFO ****
+  Attribute #: 0x0, Size: 0x60, Content size: 0x48, Name size: 0x0, ContentOffset 0x18. Resident: True
+  Flags: Archive, Max Version: 0x0, Flags 2: None, Class Id: 0x0, Owner Id: 0x0, Security Id: 0x6B8, Quota charged: 0x0, Update sequence #: 0xB2C5A8
+
+  Created On:         2025-05-28 19:42:44.7804853
+  Modified On:        2025-05-28 19:42:44.7804853
+  Record Modified On: 2025-05-28 19:43:14.4523418
+  Last Accessed On:   2025-05-28 19:42:44.7804853
+
+**** FILE NAME ****
+  Attribute #: 0x6, Size: 0x78, Content size: 0x5A, Name size: 0x0, ContentOffset 0x18. Resident: True
+
+  File name: ART-AT~1.PS1
+  Flags: Archive, Name Type: Dos, Reparse Value: 0x0, Physical Size: 0x1000, Logical Size: 0xD20
+  Parent Entry-seq #: 0x191D1-0x1
+
+  Created On:         2025-05-28 19:42:44.7804853
+  Modified On:        2025-05-28 19:42:44.7804853
+  Record Modified On: 2025-05-28 19:42:44.7804853
+  Last Accessed On:   2025-05-28 19:42:44.7804853
+```
 
 **What are the MACB timestamps for "ART-attack.ps1"?**
+| Event             | Flag | Timestamp                     |
+|-------------------|------|-------------------------------|
+| Modified | m... | 2025-05-28 19:43:14.4523418 |
+| Accessed | .a.. | 2025-05-28 19:42:44.7804853 |
+| Changed ($MFT) | ..c. | 2025-05-28 19:43:14.4523418 |
+| Birth (Creation) | ...b | 2025-05-28 19:42:44.7804853 |
 
 **Was "ART-attack.ps1" timestomped?**
 
