@@ -128,6 +128,8 @@ Flags: InUse means the file is not deleted , not in use means deleted
 
 The attributes (STANDARDINFO, FILE NAME etc) 
 
+TIP: FN is where the time when the file start to exist. The Windows API can only modify SI, so if SI and FN have a big difference, then SI might be modified. 
+
 Resident: True means the file is stored some where else on disk
 
 Record Modified On means the mft record is being modified
