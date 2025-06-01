@@ -45,11 +45,12 @@ Disk Analysis Process:
 Computername: 
 Registry: HKLM\System\CurrentControlSet\Control\Computername\
 
-DESKTOP-BBERDPP
+`DESKTOP-BBERDPP`
 
 Windows Version: 
 Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
 
+```
 ProductName               Windows 10 Enterprise Evaluation
 ReleaseID                 2009
 BuildLab                  19041.vb_release.191206-1406
@@ -61,10 +62,12 @@ UBR                       2006
 InstallDate               2025-05-28 19:20:00Z
 InstallTime               2025-05-28 19:20:00Z
 UBR                       2006
+```
 
 Timezone:
 Registry: HKLM\System\CurrentControlSet\Control\TimeZoneInformation\
 
+```
 TimeZoneInformation key
 ControlSet001\Control\TimeZoneInformation
 LastWrite Time 2025-05-29 04:17:17Z
@@ -76,6 +79,7 @@ LastWrite Time 2025-05-29 04:17:17Z
 
 Network Information: 
 Registry: HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{interface-name}
+```
 
 ```
 Adapter: {3b4cb90d-57a4-4414-8c13-e6ca6904c4d8}
@@ -165,13 +169,136 @@ DisableRealtimeMonitoring value = 1
 | 1002    | art-test          | 2025-05-28 19:47:16  |                        | 2025-05-28 19:47:16    | 0                 | Administrators, Users    |                                                                      | FALSE            | FALSE                  | TRUE                 | FALSE                     |
 
 
-Active accounts during the attack timeframe?
+**Active accounts during the attack timeframe?**
+In reg explorer, we see that the account has a last login time at Wed May 28 19:42:31, which shows that it is highly likely that this is the account being compromised.
 
-Which account(s) were created?
+```
+Username        : PWF_Victim [1001]
+SID             : S-1-5-21-247958990-3900953996-3769339170-1001
+Full Name       : 
+User Comment    : 
+Account Type    : 
+Account Created : Wed May 28 19:22:50 2025 Z
+Security Questions:
+    Question 1  : What was your first pet’s name?
+    Answer 1    : dsf
+    Question 2  : What was your childhood nickname?
+    Answer 2    : dsaf
+    Question 3  : What’s the name of the first school you attended?
+    Answer 3    : dsaf
+Name            :  
+Last Login Date : Wed May 28 19:42:31 2025 Z
+Pwd Reset Date  : Wed May 28 19:22:51 2025 Z
+Pwd Fail Date   : Never
+Login Count     : 5
+  --> Password does not expire
+  --> Password not required
+  --> Normal user account
+```
 
-Which accounts are Administrator group members?
+**Which account(s) were created?**
 
-Which users have profiles?
+art-test, created during the time frame and has 0 login. Administrator account is usually a target, however, it has a 0 login here and is also disabled. 
+Which demonstates good security practice.
 
+**Which accounts are Administrator group members?**
 
+PWF_Victim [1001], art-test [1002]
 
+**Which users have profiles?**
+
+```
+Path      : C:\Users\PWF_Victim
+SID       : S-1-5-21-247958990-3900953996-3769339170-1001
+LastWrite : 2025-05-28 19:42:01Z
+```
+
+## User Behavior
+
+**Active accounts during the attack timeframe?**
+UserAssist:
+NTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist
+
+RecentDocs (store something interacted recently with user):
+NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Exploere\RecenDocs\
+
+ShellBags:
+To do with windows explorers and windows, they can be under: 
+NTUSER.DAT:
+HKCU\Software\Microsoft\Windows\Shell\BagMRU
+HKCU\Software\Microsoft\Windows\Shell\Bags
+
+USRCLASS.DAT:
+Local Settings\Software\Microsoft\Windows\Shell\BagMRU
+Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags
+
+## NTFS - File System Analysis
+
+**Which files are located in My Computer\CLSID_Desktop\PWF-main\PWF-main\AtomicRedTeam?**
+`MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --cdvf <name of csv eg: MFT.csv>`
+
+**What is the MFT Entry Number for the file "ART-attack.ps1"?**
+To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
+
+**What are the MACB timestamps for "ART-attack.ps1"?**
+
+**Was "ART-attack.ps1" timestomped?**
+
+**When was the file "deleteme_T1551.004" created and deleted?**
+
+**What was the Entry number for "deleteme_T1551.004" and does it still exist in the MFT?**
+
+## Execution Artifacts
+
+Background Activity Moderator (BAM)
+Registry: HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings
+
+**Which executables (.exe files) did the BAM record for the IEUser (RID 1000) incl. their last execution date and time?**
+
+Determine the cache entry position for: 
+•	AtomicService.exe: 
+•	mavinject.exe: 
+
+**What SHA-1 hash did Amcache record for AtomicService.exe?**
+
+Prefetch: Use the Prefetch-Timeline output to produce a timeline of suspicious execution events in the Eric Zimmerman Timeline Explorer:
+POWERSHELL.exe
+cmd.exe
+NET.exe
+REG.exe
+SCHTASKS.exe
+SC.exe
+ATOMICSERVICE.EXE
+MAVINJECT.exe
+NOTEPAD.exe
+
+Shortcut (LNK) Files
+Path: C:\users\<username>\AppData\Roaming\Microsoft\Windows\Recent
+Path: C:\users\<username>\AppData\Roaming\Microsoft\Office\Recent
+
+## Persistence Mechanisms
+
+**What is the full path of the AtomicService.exe that was added to the run keys?**
+
+**What is the name of the suspicious script in the StartUp folder?**
+
+**When was the suspicious atomic service installed?**
+
+**Which tasks were created by the IEUser and what's the creation time?**
+
+**How many times did they execute?**
+
+## Windows Event Log Analysis
+
+**Was Defender on?**
+
+**What logins do we have during the time frame?**
+
+## Memory Analysis
+
+**PID of suspicious processes?**
+powershell.exe		<PID>
+notepad.exe		<PID>
+AtomicService.exe	<PID>
+
+**Suspicious registry key in HKCU?**
