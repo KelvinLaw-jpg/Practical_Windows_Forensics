@@ -1,4 +1,4 @@
-# Atomic Red Team Attack Script
+![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)# Atomic Red Team Attack Script
 
 Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
@@ -364,9 +364,27 @@ To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we wi
 
 **Was "ART-attack.ps1" timestomped?**
 
+Since all the time in MAC(b) is very similar, it is unlikely that the MFT had been modified. (Even if the time isn't exactly the same, if they are close to each other, it might still be genuine. Since a file inherits the FN time from the zip file.)
+
 **When was the file "deleteme_T1551.004" created and deleted?**
+ ```
+  Attribute #: 0x2, Size: 0x80, Content size: 0x66, Name size: 0x0, ContentOffset 0x18. Resident: True
+
+  File name: deleteme_T1551.004
+  Flags: Archive, Name Type: Windows, Reparse Value: 0x0, Physical Size: 0x0, Logical Size: 0x0
+  Parent Entry-seq #: 0x191E6-0x1
+
+  Created On:         2025-05-28 19:48:30.7159520
+  Modified On:        2025-05-28 19:48:30.7159520
+  Record Modified On: 2025-05-28 19:48:30.7159520
+  Last Accessed On:   2025-05-28 19:48:30.7159520
+```
+
+We can check the $J for file creation, close and deletion. As shown in image, it was deleted in 2025-05-28 19:48:37
 
 **What was the Entry number for "deleteme_T1551.004" and does it still exist in the MFT?**
+
+102492 and since it is FLAGed `IsFree`, it has been deleted. But not overwrited by new files, so might still exist in memory.
 
 ## Execution Artifacts
 
@@ -374,8 +392,27 @@ Background Activity Moderator (BAM)
 Registry: HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings
 
 **Which executables (.exe files) did the BAM record for the IEUser (RID 1000) incl. their last execution date and time?**
+```
+S-1-5-21-247958990-3900953996-3769339170-1001
+  2025-05-28 19:42:01Z - Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy
+  2025-05-28 19:42:01Z - \Device\HarddiskVolume3\Windows\explorer.exe
+  2025-05-28 19:42:01Z - Microsoft.Windows.Search_cw5n1h2txyewy
+  2025-05-28 19:42:01Z - Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy
+  2025-05-28 19:42:00Z - \Device\HarddiskVolume3\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  2025-05-28 19:42:01Z - MicrosoftWindows.Client.CBS_cw5n1h2txyewy
+  2025-05-28 19:26:31Z - \Device\HarddiskVolume3\Windows\Temp\{A08E84A9-A757-4778-AD42-13439F2A43EF}\.cr\vcredist_x86.exe
+  2025-05-28 19:26:34Z - \Device\HarddiskVolume3\Windows\Temp\{B9033729-81BF-4656-B974-E3D5315CBE85}\.cr\vcredist_x64.exe
+  2025-05-28 19:42:00Z - \Device\HarddiskVolume3\Program Files\VMware\VMware Tools\vmtoolsd.exe
+  2025-05-28 19:41:56Z - \Device\HarddiskVolume3\Windows\System32\cmd.exe
+  2025-05-28 19:42:01Z - \Device\HarddiskVolume3\Windows\System32\ApplicationFrameHost.exe
+  2025-05-28 19:42:01Z - Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe
+  2025-05-28 19:35:09Z - windows.immersivecontrolpanel_cw5n1h2txyewy
+  2025-05-28 19:37:30Z - Microsoft.Windows.SecHealthUI_cw5n1h2txyewy
+  2025-05-28 19:41:36Z - \Device\HarddiskVolume3\Windows\System32\mmc.exe
+  2025-05-28 19:41:55Z - \Device\HarddiskVolume3\Windows\System32\notepad.exe
+```
 
-Determine the cache entry position for: 
+**Determine the cache entry position for:** 
 •	AtomicService.exe: 
 •	mavinject.exe: 
 
