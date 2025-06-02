@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)# Atomic Red Team Attack Script
+![image](https://github.com/user-attachments/assets/b4072d72-d5c3-44b5-ab86-2d2487dba6c9)![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)# Atomic Red Team Attack Script
 
 Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
@@ -413,12 +413,17 @@ S-1-5-21-247958990-3900953996-3769339170-1001
 ```
 
 **Determine the cache entry position for:** 
-•	AtomicService.exe: 
-•	mavinject.exe: 
+- AtomicService.exe: 24
+- mavinject.exe: 23
 
 **What SHA-1 hash did Amcache record for AtomicService.exe?**
+Very interesting thing for trouble shooting, if we check the Amcache we got. There would be no Atomic services. After a bit of digging, I found that the Amcache
+ is updated by the Microsoft Compatibility Appraiser Schedule Task Detail Blog post: https://dfir.ru/2018/12/02/the-cit-database-and-the-syscache-hive/
 
-Prefetch: Use the Prefetch-Timeline output to produce a timeline of suspicious execution events in the Eric Zimmerman Timeline Explorer:
+ So to get what we want, we have to revert the VM to freshly compromised and execute this schtask. Then we will see the atomic service and it's hash:
+ `c51217ce3d1959e99886a567d21d0b97022bd6e3`
+
+**Prefetch: Use the Prefetch-Timeline output to produce a timeline of suspicious execution events in the Eric Zimmerman Timeline Explorer:**
 POWERSHELL.exe
 cmd.exe
 NET.exe
@@ -436,20 +441,53 @@ Path: C:\users\<username>\AppData\Roaming\Microsoft\Office\Recent
 ## Persistence Mechanisms
 
 **What is the full path of the AtomicService.exe that was added to the run keys?**
+```
+Software\Microsoft\Windows\CurrentVersion\Run
+LastWrite Time 2025-05-28 19:47:24Z
+  MicrosoftEdgeAutoLaunch_146C45B6908C4329765758A943921973 - "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --no-startup-window --win-session-start
+  OneDrive - "C:\Users\PWF_Victim\AppData\Local\Microsoft\OneDrive\OneDrive.exe" /background
+  Atomic Red Team - C:\Path\AtomicRedTeam.exe
+```
+
+Path file was deleted. 
 
 **What is the name of the suspicious script in the StartUp folder?**
+In the KAPE TRIAGE package, we also found nothing. However, we can have a look in the MFT.csv
+
+batstartup.bat
 
 **When was the suspicious atomic service installed?**
 
-**Which tasks were created by the IEUser and what's the creation time?**
+2025-05-28 19:47:34
 
+**Which tasks were created by the IEUser and what's the creation time?**
+```
+Path: \T1053_005_OnLogon
+URI : \T1053_005_OnLogon
+Task Reg Time : 2025-05-28 19:47:32Z
+Task Last Run : 2025-06-02 08:27:49Z
+Task Completed: 2025-06-02 08:27:58Z
+```
+
+```
+Path: \T1053_005_OnStartup
+URI : \T1053_005_OnStartup
+Task Reg Time : 2025-05-28 19:47:32Z
+Task Last Run : 2025-06-02 08:27:48Z
+Task Completed: 2025-06-02 08:27:57Z
+```
 **How many times did they execute?**
+Never
 
 ## Windows Event Log Analysis
 
 **Was Defender on?**
 
 **What logins do we have during the time frame?**
+
+below is base64 decoded string of event 400 from PS
+Set-Content -path "$env:SystemRoot/Temp/art-marker.txt" -value "Hello from the Atomic Red Team"
+
 
 ## Memory Analysis
 
