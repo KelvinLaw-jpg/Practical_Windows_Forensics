@@ -289,6 +289,10 @@ Extra resources for event logs:
 ### Memory Analysis with Volitility
 Just go read the book: The art of memory forensics
 
+Plugins to run: windows.info, pslist (can be manipulate by attacker), psScan (cannot be manipulate by attacker), PsTree, 
+
+
+
 ### Super Timeline 
 
 # 🧠 Super Timeline Creation Workflow (Plaso + Volatility)
