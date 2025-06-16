@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/b4072d72-d5c3-44b5-ab86-2d2487dba6c9)![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)# Atomic Red Team Attack Script
+# Atomic Red Team Attack Script
 
 Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
@@ -167,7 +167,6 @@ DisableRealtimeMonitoring value = 1
 | 504     | WDAGUtilityAccount| 2025-05-28 19:19:59  |                        | 2025-05-29 03:17:24    | 0                 |                          | Managed by the system for Windows Defender App Guard               | TRUE             | FALSE                  | TRUE                 | FALSE                     |
 | 1001    | PWF_Victim        | 2025-05-28 19:22:51  | 2025-05-28 19:42:31    | 2025-05-28 19:22:51    | 5                 | Administrators           |                                                                      | FALSE            | TRUE                   | TRUE                 | TRUE                      |
 | 1002    | art-test          | 2025-05-28 19:47:16  |                        | 2025-05-28 19:47:16    | 0                 | Administrators, Users    |                                                                      | FALSE            | FALSE                  | TRUE                 | FALSE                     |
-
 
 **Active accounts during the attack timeframe?**
 In reg explorer, we see that the account has a last login time at Wed May 28 19:42:31, which shows that it is highly likely that this is the account being compromised.
@@ -367,6 +366,11 @@ To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we wi
 Since all the time in MAC(b) is very similar, it is unlikely that the MFT had been modified. (Even if the time isn't exactly the same, if they are close to each other, it might still be genuine. Since a file inherits the FN time from the zip file.)
 
 **When was the file "deleteme_T1551.004" created and deleted?**
+
+![image](https://github.com/user-attachments/assets/b4072d72-d5c3-44b5-ab86-2d2487dba6c9)
+
+![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)
+
  ```
   Attribute #: 0x2, Size: 0x80, Content size: 0x66, Name size: 0x0, ContentOffset 0x18. Resident: True
 
