@@ -1,4 +1,4 @@
-# Atomic Red Team Attack Script
+![image](https://github.com/user-attachments/assets/97ccc546-0b69-44c7-8388-ff3f7b8a9084)# Atomic Red Team Attack Script
 
 Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
@@ -563,8 +563,19 @@ Examiner note: Looking at the Tasks key, the OnStartup task were last ran on 202
 Examiner note: For Event Log Analysis, I will use the event log explorer tool.
 
 **Was Defender on?**
+No, it was turned off and the event ID 5001 defender disabled was generated.
+![51](images/pwf_51.png)
+
+**PID of suspicious processes?**
+powershell.exe		<PID>
+notepad.exe		<PID>
+AtomicService.exe	<PID>
 
 **What logins do we have during the time frame?**
+
+Examiner notes: looking at the 4624 event ids, we have different types of logons such as type 2 (interactive), 5 (service) etc. We are interested in the user IEUser. So by filtering event log explorer, we can see who logged in during the incident time frame. So identifying the user(s) involve, we can filter by their Logon ID and see all events associated with that user.
+
+**What commands did powershell executed?**
 Examiner note: In event log explorer, we can filter powershell.evtx with event log 400 to see all powershell activities, and get a clear timeline of what has happened.
 
 ![43](images/pwf_46.png)
@@ -580,9 +591,31 @@ At some point we even see an invoke-webrequest to the atomic-red-team github pag
 
 ## Memory Analysis
 
-**PID of suspicious processes?**
-powershell.exe		<PID>
-notepad.exe		<PID>
-AtomicService.exe	<PID>
+Basic Info
+```
+Kernel Base     0xf8071c800000
+DTB     0x1ad000
+Symbols file:///opt/volatility3/volatility3/symbols/windows/ntkrnlmp.pdb/68A17FAF3012B7846079AEECDBE0A583-1.json.xz
+Is64Bit True
+IsPAE   False
+layer_name      0 WindowsIntel32e
+memory_layer    1 VmwareLayer
+base_layer      2 FileLayer
+meta_layer      2 FileLayer
+KdVersionBlock  0xf8071d40f398
+Major/Minor     15.19041
+MachineType     34404
+KeNumberProcessors      4
+SystemTime      2025-05-28 19:49:32+00:00
+NtSystemRoot    C:\Windows
+NtProductType   NtProductWinNt
+NtMajorVersion  10
+NtMinorVersion  0
+PE MajorOperatingSystemVersion  10
+PE MinorOperatingSystemVersion  0
+PE Machine      34404
+PE TimeDateStamp        Wed Jun 28 04:14:26 1995
+```
+
 
 **Suspicious registry key in HKCU?**
