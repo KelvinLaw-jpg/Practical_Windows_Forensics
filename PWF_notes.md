@@ -118,7 +118,7 @@ There is a shellbags plugin in Regripper, so just go to the session in txt, also
 ### NTFS Disk Overview
 
 Logical Overview of a hard drive partition
-![02](images/PWF_02.png)
+![02](images/pwf_06.png)
 
 To see MBR, it is at the unpatitioned Space in FTK, as an analysis the important files are at root\$MFT, patition 2 stores the windows system. The MFT contains records and flats indicating a file is being used or not, if a file is to delete, it just flag the file as deleted, but it can still be on disk. $STD_INFO holds timestamp, $FILE_NAME holds the name and time stamps, but the time stamp is not usually used, thus, the chances for it to be spoof is low, thus rather trustable. $DATA might store the pointer to the actually file, and at last is the slack space which we might find interesting things.
 
