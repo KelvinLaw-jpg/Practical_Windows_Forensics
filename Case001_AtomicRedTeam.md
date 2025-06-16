@@ -464,15 +464,20 @@ S-1-5-21-247958990-3900953996-3769339170-1001
 Examiner note: As the above image shows, notepad.exe is very likely to be used in the attack along side with the usual suspected exe (cmd, explorer, and other exe with weird characters)
 
 **Determine the cache entry position for:** 
+![image](images/pwf_25.png)
+![image](images/pwf_26.png)
 - AtomicService.exe: 24
 - mavinject.exe: 23
 
 **What SHA-1 hash did Amcache record for AtomicService.exe?**
-Very interesting thing for trouble shooting, if we check the Amcache we got. There would be no Atomic services. After a bit of digging, I found that the Amcache
- is updated by the Microsoft Compatibility Appraiser Schedule Task Detail Blog post: https://dfir.ru/2018/12/02/the-cit-database-and-the-syscache-hive/
+Examiner note: Very interesting thing for trouble shooting, if we check the Amcache we got. There would be no Atomic services. After a bit of digging, I found that the Amcache is updated by the Microsoft Compatibility Appraiser Schedule Task Detail Blog post: https://dfir.ru/2018/12/02/the-cit-database-and-the-syscache-hive/
 
  So to get what we want, we have to revert the VM to freshly compromised and execute this schtask. Then we will see the atomic service and it's hash:
  `c51217ce3d1959e99886a567d21d0b97022bd6e3`
+
+ ![image](images/pwf_27.png)
+ ![image](images/pwf_28.png)
+ ![image](images/pwf_29.png)
 
 **Prefetch: Use the Prefetch-Timeline output to produce a timeline of suspicious execution events in the Eric Zimmerman Timeline Explorer:**
 POWERSHELL.exe
@@ -485,6 +490,9 @@ ATOMICSERVICE.EXE
 MAVINJECT.exe
 NOTEPAD.exe
 
+![image](images/pwf_31.png)
+![image](images/pwf_32.png)
+
 Shortcut (LNK) Files
 Path: C:\users\<username>\AppData\Roaming\Microsoft\Windows\Recent
 Path: C:\users\<username>\AppData\Roaming\Microsoft\Office\Recent
@@ -492,6 +500,11 @@ Path: C:\users\<username>\AppData\Roaming\Microsoft\Office\Recent
 ## Persistence Mechanisms
 
 **What is the full path of the AtomicService.exe that was added to the run keys?**
+
+![image](images/pwf_33.png)
+![image](images/pwf_34.png)
+Examiner note: Nothing much in the runOnce key, but in the Run key, we found the AtomicRedTeam.exe which once existed under `C:\Path\AtomicRedTeam.exe`
+
 ```
 Software\Microsoft\Windows\CurrentVersion\Run
 LastWrite Time 2025-05-28 19:47:24Z
@@ -499,19 +512,27 @@ LastWrite Time 2025-05-28 19:47:24Z
   OneDrive - "C:\Users\PWF_Victim\AppData\Local\Microsoft\OneDrive\OneDrive.exe" /background
   Atomic Red Team - C:\Path\AtomicRedTeam.exe
 ```
-
+![image](images/pwf_35.png)
 Path file was deleted. 
 
 **What is the name of the suspicious script in the StartUp folder?**
-In the KAPE TRIAGE package, we also found nothing. However, we can have a look in the MFT.csv
-
-batstartup.bat
+Examiner note: In the KAPE TRIAGE package, we also found nothing. However, we can have a look in the MFT.csv
+![36](images/pwf_36.png)
+Examiner note: Interestingly we found a .bot startup script, lets check it in the original disk in ftk imager. Found a flag.
+![37](images/pwf_37.png)
 
 **When was the suspicious atomic service installed?**
+Examiner note: For services, I looked into the Tasks key and services key in the SYSTEM registry
 
-2025-05-28 19:47:34
+![39](images/pwf_39.png)
+![40](images/pwf_40.png)
+![41](images/pwf_41.png)
+![42](images/pwf_42.png)
+
+Examiner note: Under `C:\Windows\System32\Tasks\` we found the 2 scheduled tasks created by the attack script.
 
 **Which tasks were created by the IEUser and what's the creation time?**
+Searching the parsed txt file by regripper, we also find the following tasks under the `taskcache` plugin. 
 ```
 Path: \T1053_005_OnLogon
 URI : \T1053_005_OnLogon
@@ -528,17 +549,34 @@ Task Last Run : 2025-06-02 08:27:48Z
 Task Completed: 2025-06-02 08:27:57Z
 ```
 **How many times did they execute?**
-Never
+
+![40](images/pwf_40.png)
+![41](images/pwf_41.png)
+
+Examiner note: Looking at the Tasks key, the OnStartup task were last ran on 2025-06-02 08:27:48 and stopped on 2025-06-02 08:27:57, and the OnLogon task were ran on 2025-06-02 08:27:49 and stopped on 2025-06-02 08:27:58. An extra tip is that we can use the Autoruns tool in the sysinternals suite. we can easily identify anomaly tasks.
+
+![43](images/pwf_43.png)
+![44](images/pwf_44.png)
+![45](images/pwf_45.png)
 
 ## Windows Event Log Analysis
+Examiner note: For Event Log Analysis, I will use the event log explorer tool.
 
 **Was Defender on?**
 
 **What logins do we have during the time frame?**
+Examiner note: In event log explorer, we can filter powershell.evtx with event log 400 to see all powershell activities, and get a clear timeline of what has happened.
 
-below is base64 decoded string of event 400 from PS
+![43](images/pwf_46.png)
+![43](images/pwf_47.png)
+![43](images/pwf_49.png)
+
+Below is base64 decoded string of event 400 from PS
 Set-Content -path "$env:SystemRoot/Temp/art-marker.txt" -value "Hello from the Atomic Red Team"
 
+![43](images/pwf_50.png)
+
+At some point we even see an invoke-webrequest to the atomic-red-team github page.
 
 ## Memory Analysis
 
