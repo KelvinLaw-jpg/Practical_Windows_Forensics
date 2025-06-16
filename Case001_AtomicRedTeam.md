@@ -21,6 +21,16 @@ Tools used:
 with a write blocker. In the VM now, we will suspend the VM first. Since I am using VMware, I will preserve the .vmem and the .vmsn and hash it. Next we will collect the disk by using qemu-img by running 
 `qemu-img.exe convert -O vpc <full path that contains vmdk> output_image.vhd`. Hashes will be generated after all this. In real life, all this should be done with FTK Imager instead. 
 
+![02](images/pwf_02.png)
+![03](images/pwf_03.png)
+![07](images/pwf_07.png)
+
+Examiner notes: So after running the script, never has been touched, I suspended the machine immediately to prevent it's state. After that, I took a snapshot. I then preserved the .vmem and .vmsn file to a new location as well as using qemu-img to preserve the disk by exporting as vhd. After that, the first thing and most important thing to do is to generate and compare hash values. 
+
+![01](images/pwf_01.png)
+![08](images/pwf_08.png)
+![09](images/pwf_09.png)
+
 List of artifacts to collect and examine
 
 Disk Analysis Process: 
@@ -40,7 +50,19 @@ Disk Analysis Process:
    - Services
 - Event Log Analysis
 
+Examiner notes: Before any deep investigating, I mounted the disk using Arsenal image mounter, it was put on read mode only. However, it would be a better practice to have a hardware write blocker in real life, to prevent any accidental tempering of the disk.
+
+![04](images/pwf_04.png)
+
+Examiner notes: After browsing around and familiarise with the disk (users and files on the disk etc). I used KAPE (KAPE TRIAGE selection) to extract the most common and important evidence. Registries, Event logs, startup Folders etc.
+
+![05](images/pwf_05.png)
+
 ## System Information
+
+Examiner notes: For all the basic info of the system, I used either the registry explorer from Eric Zimmerman or Reg Ripper to obtain the information
+
+![10](images/pwf_10.png)
 
 Computername: 
 Registry: HKLM\System\CurrentControlSet\Control\Computername\
@@ -49,6 +71,8 @@ Registry: HKLM\System\CurrentControlSet\Control\Computername\
 
 Windows Version: 
 Registry: HKLM\Software\Microsoft\Windows NT\Currentversion\
+
+![11](images/pwf_11.png)
 
 ```
 ProductName               Windows 10 Enterprise Evaluation
@@ -124,6 +148,7 @@ ShutdownTime  : 2025-05-28 19:42:04Z
 
 Defender settings:
 Registry: HKLM\Software\Microsoft\Windows Defender\
+Regripper command: `rip.pl -r C:\Users\RGB_Gamr\Desktop\PWF_Victim\Common Registry\SOFTWARE -p defender`
 
 ```
 defender v.20200427
@@ -159,6 +184,8 @@ DisableRealtimeMonitoring value = 1
 
 ## Users, Groups, User Profiles
 
+![12](images/pwf_12.png)
+
 | User ID | User Name         | Created On           | Last Login Time       | Last Password Change  | Total Login Count | Groups                   | Comment                                                              | Account Disabled | Password Not Required | Normal User Account | Password Does Not Expire |
 |---------|-------------------|----------------------|------------------------|------------------------|-------------------|--------------------------|----------------------------------------------------------------------|------------------|------------------------|----------------------|---------------------------|
 | 500     | Administrator     | 2025-05-28 19:19:59  |                        |                        | 0                 | Administrators           | Built-in account for administering the computer/domain              | TRUE             | FALSE                  | TRUE                 | TRUE                      |
@@ -169,7 +196,7 @@ DisableRealtimeMonitoring value = 1
 | 1002    | art-test          | 2025-05-28 19:47:16  |                        | 2025-05-28 19:47:16    | 0                 | Administrators, Users    |                                                                      | FALSE            | FALSE                  | TRUE                 | FALSE                     |
 
 **Active accounts during the attack timeframe?**
-In reg explorer, we see that the account has a last login time at Wed May 28 19:42:31, which shows that it is highly likely that this is the account being compromised.
+Examiner note: In reg explorer, we see that the account has a last login time at Wed May 28 19:42:31, which shows that it is highly likely that this is the account being compromised.
 
 ```
 Username        : PWF_Victim [1001]
@@ -197,7 +224,7 @@ Login Count     : 5
 
 **Which account(s) were created?**
 
-art-test, created during the time frame and has 0 login. Administrator account is usually a target, however, it has a 0 login here and is also disabled. 
+Examiner note: The art-test account, was created during the time frame and has 0 login. Administrator account is usually a target, however, it has a 0 login here and is also disabled. 
 Which demonstates good security practice.
 
 **Which accounts are Administrator group members?**
@@ -205,6 +232,9 @@ Which demonstates good security practice.
 PWF_Victim [1001], art-test [1002]
 
 **Which users have profiles?**
+
+![13](images/pwf_13.png)
+![14](images/pwf_14.png)
 
 ```
 Path      : C:\Users\PWF_Victim
@@ -252,10 +282,12 @@ Value names with no time stamps:
   {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Paint.lnk (7)
 ```
 
-From the above, we see that within the time frame of 2025-05-28 19:20, the following programs have been accessed: powershell, cmd, paint, mmc, notepad, snipping tool.
+Examiner note: From the above, we see that within the time frame of 2025-05-28 19:20, the following programs have been accessed: powershell, cmd, paint, mmc, notepad, snipping tool.
 
 RecentDocs (store something interacted recently with user):
 NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Exploere\RecenDocs\
+
+![16](images/pwf_16.png)
 
 ```
 recentdocs v.20200427
@@ -298,6 +330,11 @@ USRCLASS.DAT:
 Local Settings\Software\Microsoft\Windows\Shell\BagMRU
 Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags
 
+![17](images/pwf_17.png)
+![18](images/pwf_18.png)
+
+Examiner note: looking at the shell bags in registry exploere and shellbags explorer, there is nothing much we can see.
+
 ```
 shellbags v.20200428
 (USRCLASS.DAT) Shell/BagMRU traversal in Win7+ USRCLASS.DAT hives
@@ -316,7 +353,7 @@ MRU Time             |Modified             | Accessed             | Created     
 ```
 ## NTFS - File System Analysis
 
-We will parse the file with the following command `MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --csvf <name of csv eg: MFT.csv>`
+Examiner note: We will parse the file with the following command `MFTECmd.exe -f <the mft we want to parse> --csv <Full path that we wanna store the CSV> --csvf <name of csv eg: MFT.csv>`. looking at the parsed csv in timeline explorer, we see the following files related to the AtomicRedTeam.
 
 **Which files are related to AtomicRedTeam?**
 - Invoke-AtomicRedTeam.psd1
@@ -327,9 +364,9 @@ We will parse the file with the following command `MFTECmd.exe -f <the mft we wa
 
 **What is the MFT Entry Number for the file "ART-attack.ps1"?**
 
+![19](pwf_19.png)
 
-
-To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
+To see more details in the MFT, I used `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
 ```
 **** STANDARD INFO ****
   Attribute #: 0x0, Size: 0x60, Content size: 0x48, Name size: 0x0, ContentOffset 0x18. Resident: True
@@ -363,13 +400,16 @@ To see the full file,we can `MFTECmd.exe -f <MFT> --de <Entry Number>` and we wi
 
 **Was "ART-attack.ps1" timestomped?**
 
-Since all the time in MAC(b) is very similar, it is unlikely that the MFT had been modified. (Even if the time isn't exactly the same, if they are close to each other, it might still be genuine. Since a file inherits the FN time from the zip file.)
+Examiner note: Since all the time in MAC(b) is very similar, it is unlikely that the MFT had been modified. (Even if the time isn't exactly the same, if they are close to each other, it might still be genuine. Since a file inherits the FN time from the zip file.)
 
 **When was the file "deleteme_T1551.004" created and deleted?**
 
-![image](https://github.com/user-attachments/assets/b4072d72-d5c3-44b5-ab86-2d2487dba6c9)
 
-![image](https://github.com/user-attachments/assets/d4800b79-7dbe-46d2-bd65-e6526c8f93f3)
+![image](images/pwf_20.png)
+
+Examiner note: So we see the entry of deleteme, we can see if we can find more info from the mft.
+
+![image](images/pwf_21.png)
 
  ```
   Attribute #: 0x2, Size: 0x80, Content size: 0x66, Name size: 0x0, ContentOffset 0x18. Resident: True
@@ -384,6 +424,8 @@ Since all the time in MAC(b) is very similar, it is unlikely that the MFT had be
   Last Accessed On:   2025-05-28 19:48:30.7159520
 ```
 
+![image](images/pwf_23.png)
+
 We can check the $J for file creation, close and deletion. As shown in image, it was deleted in 2025-05-28 19:48:37
 
 **What was the Entry number for "deleteme_T1551.004" and does it still exist in the MFT?**
@@ -396,6 +438,9 @@ Background Activity Moderator (BAM)
 Registry: HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings
 
 **Which executables (.exe files) did the BAM record for the IEUser (RID 1000) incl. their last execution date and time?**
+
+![image](images/pwf_24.png)
+
 ```
 S-1-5-21-247958990-3900953996-3769339170-1001
   2025-05-28 19:42:01Z - Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy
@@ -415,6 +460,8 @@ S-1-5-21-247958990-3900953996-3769339170-1001
   2025-05-28 19:41:36Z - \Device\HarddiskVolume3\Windows\System32\mmc.exe
   2025-05-28 19:41:55Z - \Device\HarddiskVolume3\Windows\System32\notepad.exe
 ```
+
+Examiner note: As the above image shows, notepad.exe is very likely to be used in the attack along side with the usual suspected exe (cmd, explorer, and other exe with weird characters)
 
 **Determine the cache entry position for:** 
 - AtomicService.exe: 24
