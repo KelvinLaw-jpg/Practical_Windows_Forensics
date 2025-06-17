@@ -289,9 +289,62 @@ Extra resources for event logs:
 ### Memory Analysis with Volitility
 Just go read the book: The art of memory forensics
 
-Plugins to run: windows.info, pslist (can be manipulate by attacker), psScan (cannot be manipulate by attacker), PsTree, 
+Plugins to run: windows.info, pslist (can be manipulate by attacker), psScan (cannot be manipulate by attacker), PsTree 
 
+Methodology: we try to find sus process by `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.psscan > psscan.txt`, after identifying their pid,
+we dig a bit deeper on each of them by checking their tree relationship `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.pstree --pid <sus pid>`.
+We can then dump the process binary by saying `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.psscan --pid <sus pid> --dump`. We can also list
+all the related dlls related to that process by saying `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.dlllist --pid <sus pid>` and dump all the 
+dll files saying `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.dlllist --pid <sus pid> --dump`
 
+After all that we can run strings to check all the strings and hash all the sus dll and binaries and check on VT.
+
+We can also say `vol.py -f "Windows 10 x64-Snapshot1.vmem" windows.getsids --pid <sus pid>` to see who owns/runs the process
+
+Little automation script to get all txt files from sus processes
+```sh
+#!/bin/bash
+
+# Check arguments
+if [ "$#" -lt 2 ]; then
+  echo "Usage: $0 <memory_file> <pid1> [pid2 pid3 ...]"
+  exit 1
+fi
+
+MEMFILE="$1"
+shift
+PIDS=("$@")
+
+DUMPDIR="./vol_output"
+mkdir -p "$DUMPDIR"
+
+for PID in "${PIDS[@]}"; do
+  echo "Analyzing PID $PID..."
+
+  # Run pstree
+  echo "[*] Running pstree for PID $PID"
+  vol.py -f "$MEMFILE" windows.pstree --pid "$PID" > "$DUMPDIR/pstree_$PID.txt"
+
+  # Run pslist
+  echo "[*] Running pslist for PID $PID"
+  vol.py -f "$MEMFILE" windows.pslist --pid "$PID" > "$DUMPDIR/pslist_$PID.txt"
+
+  # Run dlllist
+  echo "[*] Running dlllist for PID $PID"
+  vol.py -f "$MEMFILE" windows.dlllist --pid "$PID" > "$DUMPDIR/dlllist_$PID.txt"
+
+done
+
+# Run getsid for all PIDs at once
+echo "[*] Running getsid for all selected PIDs..."
+vol.py -f "$MEMFILE" windows.getsid --pid "${PIDS[@]}" > "$DUMPDIR/getsid_all.txt"
+
+echo "Done. Output saved in $DUMPDIR/"
+```
+
+Volatility is also good for checking registry because it is the latest and greatest, and the files associate with the dirty hives are the actions in memory, which
+is to be updated. we can say `vol.py -f <mem> windows.registry.printkey -h` to see what we need to do, first will do `vol.py -f <mem> windows.registry.hivelist` 
+to see all hives in memory and we can see their relative offset, and knowing the offset, we can say `vol.py -f <mem> windows.registry.printkey --offset <offset> --key <keyname>
 
 ### Super Timeline 
 
