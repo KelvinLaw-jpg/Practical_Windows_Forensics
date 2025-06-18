@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/97ccc546-0b69-44c7-8388-ff3f7b8a9084)# Atomic Red Team Attack Script
+# Atomic Red Team Attack Script
 
 Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
 and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
