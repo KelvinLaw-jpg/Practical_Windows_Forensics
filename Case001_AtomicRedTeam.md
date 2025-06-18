@@ -744,7 +744,7 @@ First, we will filter by the time when I ran the script. In reality, this will b
 in this case, we know everything started with a script called `ART-attack.ps1`. So we can search it.  Next we can look for anything related to `atomicservice.exe`,
 and `notepad.exe`
 
-**To use super timeline effectively, we would like to search by the suspicious programs, and construct a precise super timeline for each of these processes or exe
+**To use super timeline effectively, we would like to search by the suspicious programs, and construct a precise super timeline for each of these processes or exe**
 
 
 
