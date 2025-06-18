@@ -679,26 +679,32 @@ PID	Process	SID	Name
 Process 8456 - Atomic Service
 -
 **pstree**
+
 ![59](images/pwf_59.png)
 
 **dlllist**
+
 ![56](images/pwf_56.png)
 
 Process 5860 - notepad.exe
 -
 **pstree**
+
 ![58](images/pwf_58.png)
 
 **dlllist**
+
 ![62](images/pwf_62.png)
 
 Process 7388 - powershell
 -
 **pstree**
+
 ![63](images/pwf_63.png)
 
 **dlllist**
-Nothing particularly interesting
+
+(Nothing particularly interesting)
 
 
 
