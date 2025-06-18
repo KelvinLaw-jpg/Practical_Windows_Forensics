@@ -706,6 +706,18 @@ Process 7388 - powershell
 
 (Nothing particularly interesting)
 
+Examiner note: I then dumped the atomic service useing `vol.py -f Windows\ 10\ x64-Snapshot1.vmem windows.psscan --pid 8456 --dump`, it's sha256 
+hash is `4c4b71bf18456cc551c646a62b88494a77f369d3a60b9cdc65fab22571e51b75  8456.AtomicService..0xae0000.dmp`. 
 
+Using `strings 8456.AtomicService..0xae0000.dmp`, we find more IOCs, which can be used to write YARA rules:
+![64](images/pwf_64.png)
 
+Examiner note: Looking at the dlllist of notepad.exe, we can see a process injection where the process notepad.exe got injected with a malicious 
+dll, we can dump the dlls using `vol.py -f Windows\ 10\ x64-Snapshot1.vmem windows.dlllist --pid 5860 --dump`, the hash of malicious dll is 
+`e6e2cc4cbb09a5e778b182fcc41f7cc294cf3c456b7a0395f236ca07d033373b  pid.5860.T1055.001.dll.0x1095f2bbb10.0x7ffc92090000.dmp`, and do a malware 
+analysis. 
 
+After running `strings pid.5860.T1055.001.dll.0x1095f2bbb10.0x7ffc92090000.dmp`, there are also interesting findings:
+![65](images/pwf_65.png)
+
+From Mitre Att&ck [T1179](https://attack.mitre.org/techniques/T1056/004/) is an input capture, technique, thus we can infer this dll has keylogging capabilities.
