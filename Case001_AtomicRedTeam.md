@@ -566,12 +566,9 @@ Examiner note: For Event Log Analysis, I will use the event log explorer tool.
 No, it was turned off and the event ID 5001 defender disabled was generated.
 ![51](images/pwf_51.png)
 
-**PID of suspicious processes?**
-powershell.exe		<PID>
-notepad.exe		<PID>
-AtomicService.exe	<PID>
-
 **What logins do we have during the time frame?**
+
+![53](images/pwf_53.png)
 
 Examiner notes: looking at the 4624 event ids, we have different types of logons such as type 2 (interactive), 5 (service) etc. We are interested in the user IEUser. So by filtering event log explorer, we can see who logged in during the incident time frame. So identifying the user(s) involve, we can filter by their Logon ID and see all events associated with that user.
 
@@ -591,7 +588,9 @@ At some point we even see an invoke-webrequest to the atomic-red-team github pag
 
 ## Memory Analysis
 
-Basic Info
+**Basic Info**
+Command ran: vol.py -f Windows\ 10\ x64-Snapshot1.vmem windows.info
+
 ```
 Kernel Base     0xf8071c800000
 DTB     0x1ad000
@@ -617,5 +616,90 @@ PE Machine      34404
 PE TimeDateStamp        Wed Jun 28 04:14:26 1995
 ```
 
+**Processes in memory**
 
-**Suspicious registry key in HKCU?**
+**PID of suspicious processes?**
+powershell.exe		7388
+notepad.exe		5860
+AtomicService.exe	8456
+
+Command ran: vol.py -f Windows\ 10\ x64-Snapshot1.vmem windows.psscan
+
+Examiner note: Below shows the suspicious processes: AtomicService (pid:8456), whoami.exe (pid:7272), notepad.exe (pid:5860), powershell (pid:7388)
+
+![54](images/pwf_54.png)
+
+Examiner note: After Identifying the suspicious process, I wrote a bash script which automates the commands to use pstree, pslist, dlllist, and getsid. Basically this will help us understand the child parent relationship, the related image and it's paths, related dlls and related users for each processes.
+
+**Getsid result**
+```
+Volatility 3 Framework 2.26.1
+
+PID	Process	SID	Name
+
+7388	powershell.exe	S-1-5-21-247958990-3900953996-3769339170-1001	PWF_Victim
+7388	powershell.exe	S-1-5-21-247958990-3900953996-3769339170-513	Domain Users
+7388	powershell.exe	S-1-1-0	Everyone
+7388	powershell.exe	S-1-5-114	Local Account (Member of Administrators)
+7388	powershell.exe	S-1-5-32-544	Administrators
+7388	powershell.exe	S-1-5-32-545	Users
+7388	powershell.exe	S-1-5-4	Interactive
+7388	powershell.exe	S-1-2-1	Console Logon (Users who are logged onto the physical console)
+7388	powershell.exe	S-1-5-11	Authenticated Users
+7388	powershell.exe	S-1-5-15	This Organization
+7388	powershell.exe	S-1-5-113	Local Account
+7388	powershell.exe	S-1-5-5-0-101058	Logon Session
+7388	powershell.exe	S-1-2-0	Local (Users with the ability to log in locally)
+7388	powershell.exe	S-1-5-64-10	NTLM Authentication
+7388	powershell.exe	S-1-16-12288	High Mandatory Level
+8456	AtomicService.	S-1-5-18	Local System
+8456	AtomicService.	S-1-5-32-544	Administrators
+8456	AtomicService.	S-1-1-0	Everyone
+8456	AtomicService.	S-1-5-11	Authenticated Users
+8456	AtomicService.	S-1-16-16384	System Mandatory Level
+5860	notepad.exe	S-1-5-21-247958990-3900953996-3769339170-1001	PWF_Victim
+5860	notepad.exe	S-1-5-21-247958990-3900953996-3769339170-513	Domain Users
+5860	notepad.exe	S-1-1-0	Everyone
+5860	notepad.exe	S-1-5-114	Local Account (Member of Administrators)
+5860	notepad.exe	S-1-5-32-544	Administrators
+5860	notepad.exe	S-1-5-32-545	Users
+5860	notepad.exe	S-1-5-4	Interactive
+5860	notepad.exe	S-1-2-1	Console Logon (Users who are logged onto the physical console)
+5860	notepad.exe	S-1-5-11	Authenticated Users
+5860	notepad.exe	S-1-5-15	This Organization
+5860	notepad.exe	S-1-5-113	Local Account
+5860	notepad.exe	S-1-5-5-0-101058	Logon Session
+5860	notepad.exe	S-1-2-0	Local (Users with the ability to log in locally)
+5860	notepad.exe	S-1-5-64-10	NTLM Authentication
+5860	notepad.exe	S-1-16-12288	High Mandatory Level
+```
+
+(Due to the long list, I will just show the most interesting with images instead of using table)
+
+Process 8456 - Atomic Service
+-
+**pstree**
+![59](images/pwf_59.png)
+
+**dlllist**
+![56](images/pwf_56.png)
+
+Process 5860 - notepad.exe
+-
+**pstree**
+![58](images/pwf_58.png)
+
+**dlllist**
+![62](images/pwf_62.png)
+
+Process 7388 - powershell
+-
+**pstree**
+![63](images/pwf_63.png)
+
+**dlllist**
+Nothing particularly interesting
+
+
+
+
