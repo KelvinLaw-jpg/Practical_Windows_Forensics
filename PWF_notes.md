@@ -348,7 +348,7 @@ to see all hives in memory and we can see their relative offset, and knowing the
 
 ### Super Timeline 
 
-# 🧠 Super Timeline Creation Workflow (Plaso + Volatility)
+🧠 Super Timeline Creation Workflow (Plaso + Volatility)
 
 This workflow combines disk and memory evidence to create a comprehensive super timeline. Below are the steps, tools, and commands used to achieve this.
 
@@ -362,6 +362,7 @@ This workflow combines disk and memory evidence to create a comprehensive super 
 
 ## 🛠 Tools Required
 - `log2timeline.py` – Extracts timeline data from disk
+- `QEMU` - To create a raw disk image, because log2timeline only supports raw
 - `volatility` – Extracts memory artifacts (bodyfile format)
 - `psort.py` – Parses Plaso storage into a readable CSV timeline
 - `plaso-storage-tool` (optional) – To merge multiple Plaso stores
@@ -369,11 +370,10 @@ This workflow combines disk and memory evidence to create a comprehensive super 
 ---
 
 ## 🔄 Step-by-Step Workflow
-
-### 1. Create Timeline from Disk Image (Plaso)
-```bash
-log2timeline.py disk.plaso disk.E01
-```
+1. use vol to generate bodyfile
+2. parse disk with log2timeline to gen a plaso file
+3. merge bodyfile and plaso file to 1 file
+4. and generate a super timeline with psort from plaso tools 
 
 
 ### Additional Resources
