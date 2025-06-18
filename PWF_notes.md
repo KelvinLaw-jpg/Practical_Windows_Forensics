@@ -373,7 +373,8 @@ This workflow combines disk and memory evidence to create a comprehensive super 
 1. use vol to generate bodyfile
 2. parse disk with log2timeline to gen a plaso file
 3. merge bodyfile and plaso file to 1 file
-4. and generate a super timeline with psort from plaso tools 
+4. and generate a super timeline with psort from plaso tools
+5. Last, we will analyse it with timeline explorer
 
 
 ### Additional Resources
