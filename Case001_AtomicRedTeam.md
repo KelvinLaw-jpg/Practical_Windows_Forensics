@@ -721,3 +721,31 @@ After running `strings pid.5860.T1055.001.dll.0x1095f2bbb10.0x7ffc92090000.dmp`,
 ![65](images/pwf_65.png)
 
 From Mitre Att&ck [T1179](https://attack.mitre.org/techniques/T1056/004/) is an input capture, technique, thus we can infer this dll has keylogging capabilities.
+
+## Super Timeline
+
+1. use vol to generate bodyfile
+2. parse disk with log2timeline to gen a plaso file
+3. merge bodyfile and plaso file to 1 file
+4. and generate a super timeline with psort from plaso tools
+5. Analysis with Timeline explorer
+
+1. We will convert vhd to raw: `qemu-img convert -O raw win10-disk.vhd win10-disk.raw`
+2. We then make a bodyfile of the memory: vol.py -f <memoryfile> timeliner --create-bodyfile
+3. Make disk plaso file with the raw: log2timeline.py --storage-file disk.plaso <path to disk file in raw format> //Disk.plaso is the output file (get plaso file to merge with volatility.body)
+4. `pinfo.py disk.plaso` //to see overview info of the plaso file
+5. To merge plaso with the body file, we say `log2timeline.py --parser=mactime --storage-file=disk.plaso volatility.body`, then we want to create a csv file we can read. To convert the plaso file to csv, we say `psort.py -o l2tcsv -w super-timeline.csv disk.plaso` this will output a very big file which isnt ideal, so we can add a filter by saying `psort.py -o l2tcsv -w super-timeline.csv disk.plaso "date > '2022-03-01 00:00:00'"` The filter "date > '2022-03-01 00:00:00'" is sayingI want anything after the date '2022-03-01 00:00:00'.
+
+
+
+## Analysing Super Timeline
+
+First, we will filter by the time when I ran the script. In reality, this will be the beginning of the incident. Then we can do searches according to what we know,
+in this case, we know everything started with a script called `ART-attack.ps1`. So we can search it.  Next we can look for anything related to `atomicservice.exe`,
+and `notepad.exe`
+
+**To use super timeline effectively, we would like to search by the suspicious programs, and construct a precise super timeline for each of these processes or exe
+
+
+
+
