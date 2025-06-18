@@ -1,7 +1,6 @@
 # Atomic Red Team Attack Script
 
-Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the attomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site 
-and proceed with a full Windows Forensics project as we would on field. Finishing with a deacted forensic report at the end.
+Project Brief: This project is to set up a win 10 virtual machine as a target, attack it using the atomic red team attack script. Simulate that we are a Forensic Analyst just arriving to the site and proceed with a full Windows Forensics case as we would on field. Finishing with a deacted forensic report at the end.
 
 Below are the attacks that this script has executed:
 ![ART](images/PWF_Analysis-MITRE.png)
@@ -14,10 +13,11 @@ Tools used:
 - RegRipper
 - Arsenal Image Mounter
 
-### Collection
+## Collection
+
 
 **Order of collection should always follow the order of volitility**
-**Step 1**: In real life we will either take a live Data from the machine or put the machine into hibernation so we can collect the data from the memory through hiber.sys file on windows. All this should be done
+- **Step 1**: In real life we will either take a live Data from the machine or put the machine into hibernation so we can collect the data from the memory through hiber.sys file on windows. All this should be done
 with a write blocker. In the VM now, we will suspend the VM first. Since I am using VMware, I will preserve the .vmem and the .vmsn and hash it. Next we will collect the disk by using qemu-img by running 
 `qemu-img.exe convert -O vpc <full path that contains vmdk> output_image.vhd`. Hashes will be generated after all this. In real life, all this should be done with FTK Imager instead. 
 
