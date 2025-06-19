@@ -364,7 +364,7 @@ Examiner note: We will parse the file with the following command `MFTECmd.exe -f
 
 **What is the MFT Entry Number for the file "ART-attack.ps1"?**
 
-![19](pwf_19.png)
+![19](images/pwf_19.png)
 
 To see more details in the MFT, I used `MFTECmd.exe -f <MFT> --de <Entry Number>` and we will see the metadata of that file entry
 ```
