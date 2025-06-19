@@ -755,7 +755,7 @@ To get the plaso file we say `log2timeline --storage-file disk.plaso PWF_Victim.
 We will then run `log2timeline --parser=mactime --storage-file disk.plaso volatility.body` to get a plaso file to merge, commands is saying we use the parser mactime to merge the volatility body file into the disk.plaso file. 
 
 
-Then, to get a readable csv file we say `psort -o l2tcsv -w super-timeline.csv disk.plaso "date > '2025-05-28 00:00:00'" `//psort normally is just to convert plaso files into other formats, so here we mean i want to conver log2timeline to csv as output(-o) and the name (-w) is super-timeline.csv, from the plaso file `disk.plaso` and ofcos to filter it by date
+Then, to get a readable csv file we say `psort -o l2tcsv -w super-timeline.csv disk.plaso "date > '2025-05-28 00:00:00'"`//psort normally is just to convert plaso files into other formats, so here we mean i want to conver log2timeline to csv as output(-o) and the name (-w) is super-timeline.csv, from the plaso file `disk.plaso` and ofcos to filter it by date
 
 
 
