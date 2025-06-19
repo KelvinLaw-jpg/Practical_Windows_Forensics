@@ -760,19 +760,17 @@ Then, to get a readable csv file we say `psort -o l2tcsv -w super-timeline.csv d
 ![70](images/pwf_70.png)
 
 
-
 ## Analysing Super Timeline
 
-First, we will filter by the time when I ran the script. In reality, this will be the beginning of the incident. Then we can do searches according to what we know,
-in this case, we know everything started with a script called `ART-attack.ps1`. So we can search it.  Next we can look for anything related to `atomicservice.exe`,
-and `notepad.exe`
+First, we will filter by the time when I ran the script. In reality, this will be the beginning of the incident. Then we can do searches according to what we know, in this case, we know everything started with a script called `ART-attack.ps1`. So we can search it.  Next we can look for anything related to `atomicservice.exe`, and `notepad.exe`
 
 
 
 
 
 
-**To use super timeline effectively, we would like to search by the suspicious programs, and construct a precise super timeline for each of these processes or exe**
+
+
 
 
 
