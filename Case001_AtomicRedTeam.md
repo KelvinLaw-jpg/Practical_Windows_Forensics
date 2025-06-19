@@ -737,12 +737,38 @@ From Mitre Att&ck [T1179](https://attack.mitre.org/techniques/T1056/004/) is an 
 5. To merge plaso with the body file, we say `log2timeline.py --parser=mactime --storage-file=disk.plaso volatility.body`, then we want to create a csv file we can read. To convert the plaso file to csv, we say `psort.py -o l2tcsv -w super-timeline.csv disk.plaso` this will output a very big file which isnt ideal, so we can add a filter by saying `psort.py -o l2tcsv -w super-timeline.csv disk.plaso "date > '2022-03-01 00:00:00'"` The filter "date > '2022-03-01 00:00:00'" is sayingI want anything after the date '2022-03-01 00:00:00'.
 
 
+My work
+-
+1. I converted the vhd to raw: `qemu-img convert -O raw C:\Users\RGB_Gamr\Desktop\PWF_Victim\OG\PWF_Victim.vhd C:\Users\RGB_Gamr\Desktop\PWF_Victim\OG\PWF_Victim.raw`
+
+![66](images/pwf_66.png)
+
+2. I then created the body file with `vol.py -f 'Windows 10 x64-Snapshot1.vmem' timeliner --create-bodyfile`
+
+![67](images/pwf_67.png)
+![68](images/pwf_68.png)
+
+We will then run `log2timeline --storage-file disk.plaso PWF_Victim.raw`
+
+
+
+
+
+
+
+
+
 
 ## Analysing Super Timeline
 
 First, we will filter by the time when I ran the script. In reality, this will be the beginning of the incident. Then we can do searches according to what we know,
 in this case, we know everything started with a script called `ART-attack.ps1`. So we can search it.  Next we can look for anything related to `atomicservice.exe`,
 and `notepad.exe`
+
+
+
+
+
 
 **To use super timeline effectively, we would like to search by the suspicious programs, and construct a precise super timeline for each of these processes or exe**
 
