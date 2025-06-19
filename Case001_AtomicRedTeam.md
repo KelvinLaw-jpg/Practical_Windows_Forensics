@@ -748,7 +748,9 @@ My work
 ![67](images/pwf_67.png)
 ![68](images/pwf_68.png)
 
-We will then run `log2timeline --storage-file disk.plaso PWF_Victim.raw`
+We will then run `log2timeline --storage-file disk.plaso PWF_Victim.raw` to get a plaso file to merge:
+
+![68](images/pwf_69.png)
 
 
 
